@@ -43,9 +43,9 @@ public class ChatServer implements  Runnable {
                 }
 
                 System.out.println(id + " : " + message); //muestra el msj por consola
-                byte[] data = (id + " : " + message).getBytes();
+                byte[] data = (id + " : " + message).getBytes(); //guardamos los datos obtenidos en el byte
                 for (int i = 0; i < client_addresses.size(); i++) {
-                    InetAddress cl_address = client_addresses.get(i);
+                    InetAddress cl_address = client_addresses.get(i); //tengo que entender bien que hace aca
                     int cl_port = client_ports.get(i);
                     packet = new DatagramPacket(data, data.length, cl_address, cl_port);
                     socket.send(packet);
