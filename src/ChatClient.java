@@ -25,7 +25,7 @@ class MessageSender implements Runnable {
         boolean connected = false;
         do {
             try {
-                sendMessage("New client connected - welcome!");
+                sendMessage("Nuevo cliente conectado - Bienvenido!");
                 connected = true;
             } catch (Exception e) {
                 window.displayMessage(e.getMessage());
@@ -64,7 +64,7 @@ class MessageReceiver implements Runnable {
                 socket.receive(packet);
                 String received = new String(packet.getData(), 1, packet.getLength() - 1).trim();
                 System.out.println(received);
-                window.displayMessage(received + " recibido");
+                window.displayMessage(received);
             } catch (Exception e) {
                 System.err.println(e);
             }
@@ -75,8 +75,6 @@ class MessageReceiver implements Runnable {
 public class ChatClient {
 
     public static void main(String args[]) throws Exception {
-
-
         ClientWindow window = new ClientWindow();
         String host = window.getHostName();
         window.setTitle("UDP CHAT  Server: " + host);
