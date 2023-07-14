@@ -33,7 +33,6 @@ public class ChatServer implements  Runnable {
                 InetAddress clientAddress = packet.getAddress(); //de la clase DatagramPacket usamos
                 //metodo para obtener la ip de ese paquete
                 int client_port = packet.getPort(); //lo mismo para el puerto asignado a esta comunicacion
-
                 String id = clientAddress.toString() + "|" + client_port;
                 // si el cliente no estaba ya conectado se lo agrega a:
                 if (!existing_clients.contains(id)) {
@@ -41,13 +40,33 @@ public class ChatServer implements  Runnable {
                     client_ports.add(client_port); // el puerto por separado en un array
                     client_addresses.add(clientAddress); //la ip por separado en otro array
                 }
-                System.out.println(id + " :" + message); //muestra el msj por consola
+
+                String received=id + " :" + message;
+                System.out.println(received); //muestra el msj por consola
+                String senderIp="/";
+                boolean status=false;
+                for (int i=0;i<received.length();i++){
+                    if (received.charAt(i)==':'){
+                        status=true;
+                        i++;
+                    }
+                    if (received.charAt(i) == '#'){
+                        status=false;
+                    }
+                    if (status){
+                        senderIp=senderIp+received.charAt(i);
+                    }
+                }
                 byte[] data = (id + " :" + message).getBytes(); //guardamos los datos obtenidos en el byte
                 for (int i = 0; i < client_addresses.size(); i++) {
-                    InetAddress cl_address = client_addresses.get(i); //tengo que entender bien que hace aca
+                    InetAddress cl_address = client_addresses.get(i); //ACA HAY QUE CAMBIAR QUE SEA SOLO AL QUE TIENE LA IP ESPECIFICADA
                     int cl_port = client_ports.get(i);
-                    packet = new DatagramPacket(data, data.length, cl_address, cl_port);
-                    socket.send(packet);
+                    System.out.println(senderIp + "   sender");
+                    System.out.println(client_addresses.get(i)+ "    lista");
+                    if (client_addresses.get(i).toString().equals(senderIp)){
+                        packet = new DatagramPacket(data, data.length, cl_address, cl_port);
+                        socket.send(packet);
+                    }
                 }
             } catch (Exception e) {
                 System.err.println(e);

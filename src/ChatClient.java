@@ -91,7 +91,6 @@ class MessageReceiver implements Runnable {
                 else {
                     receivedFinal=received;
                 }
-                System.out.println(InetAddress.getLocalHost());
                 System.out.println(receivedFinal);
                 window.displayMessage(receivedFinal); //tmb se imprime en la ventana
             } catch (Exception e) {
