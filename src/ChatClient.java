@@ -1,6 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 
 class MessageSender implements Runnable {
     public final static int PORT = 2020; //puerto asignado al server
@@ -65,29 +66,62 @@ class MessageReceiver implements Runnable {
                 socket.receive(packet);
                 String received = new String(packet.getData(), 1, packet.getLength() - 1).trim();
                 //crea una string con los datos recibidos
-                String receivedFinal=" ";
+                String receivedFinal="";
                 String senderIp="";
                 boolean status=false;
                 for (int i=0;i<received.length();i++){
-                    if (received.charAt(i)=='#'){
+
+                    if (received.charAt(i)==':'){
                         status=true;
+                        i++;
                     }
-                    if (status==false){
+                    if (received.charAt(i) == '#'){
+                        status=false;
+                    }
+                    if (status){
                         senderIp=senderIp+received.charAt(i);
                     }
                     else {
                         receivedFinal=receivedFinal+received.charAt(i);
                     }
                 }
-                if (receivedFinal.equals(" ")){
-                    receivedFinal="No";
+                if (senderIp.equals("Nuevo cliente conectado - Bienvenido!")==false) {
+                    InetAddress address = InetAddress.getByName(senderIp);
                 }
+                else {
+                    receivedFinal=received;
+                }
+                System.out.println(InetAddress.getLocalHost());
                 System.out.println(receivedFinal);
                 window.displayMessage(receivedFinal); //tmb se imprime en la ventana
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
+    }
+
+    public DatagramSocket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(DatagramSocket socket) {
+        this.socket = socket;
+    }
+
+    public byte[] getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(byte[] buffer) {
+        this.buffer = buffer;
+    }
+
+    public ClientWindow getWindow() {
+        return window;
+    }
+
+    public void setWindow(ClientWindow window) {
+        this.window = window;
     }
 }
 

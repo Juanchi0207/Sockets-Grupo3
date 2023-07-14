@@ -55,6 +55,38 @@ public class ChatServer implements  Runnable {
         }
     }
 
+    public DatagramSocket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(DatagramSocket socket) {
+        this.socket = socket;
+    }
+
+    public ArrayList<InetAddress> getClient_addresses() {
+        return client_addresses;
+    }
+
+    public void setClient_addresses(ArrayList<InetAddress> client_addresses) {
+        this.client_addresses = client_addresses;
+    }
+
+    public ArrayList<Integer> getClient_ports() {
+        return client_ports;
+    }
+
+    public void setClient_ports(ArrayList<Integer> client_ports) {
+        this.client_ports = client_ports;
+    }
+
+    public HashSet<String> getExisting_clients() {
+        return existing_clients;
+    }
+
+    public void setExisting_clients(HashSet<String> existing_clients) {
+        this.existing_clients = existing_clients;
+    }
+
     public static void main(String args[]) throws Exception {
         ChatServer server_thread = new ChatServer();
         server_thread.run();
