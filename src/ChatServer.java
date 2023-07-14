@@ -41,14 +41,28 @@ public class ChatServer implements  Runnable {
                     client_ports.add(client_port); // el puerto por separado en un array
                     client_addresses.add(clientAddress); //la ip por separado en otro array
                 }
-
+                String finalMessage=id+ " : " + message;
                 System.out.println(id + " : " + message); //muestra el msj por consola
                 byte[] data = (id + " : " + message).getBytes(); //guardamos los datos obtenidos en el byte
+                boolean status = false;
+                String ipReciver ="";
+                for (int i=0;i< finalMessage.length();i++){
+                    if(finalMessage.charAt(i) == '@'){
+                        status=true;
+                        i++;
+                    }
+                    if (status){
+                        ipReciver=ipReciver+finalMessage.charAt(i);
+                    }
+                }
+                InetAddress reciverAddress = InetAddress.getByName(ipReciver);
                 for (int i = 0; i < client_addresses.size(); i++) {
                     InetAddress cl_address = client_addresses.get(i); //tengo que entender bien que hace aca
                     int cl_port = client_ports.get(i);
-                    packet = new DatagramPacket(data, data.length, cl_address, cl_port);
-                    socket.send(packet);
+                    if (cl_address.equals(reciverAddress)) {
+                        packet = new DatagramPacket(data, data.length, cl_address, cl_port);
+                        socket.send(packet);
+                    }
                 }
             } catch (Exception e) {
                 System.err.println(e);
