@@ -59,10 +59,9 @@ public class ChatServer implements  Runnable {
                 }
                 byte[] data = (id + " :" + message).getBytes(); //guardamos los datos obtenidos en el byte
                 for (int i = 0; i < client_addresses.size(); i++) {
-                    InetAddress cl_address = client_addresses.get(i); //ACA HAY QUE CAMBIAR QUE SEA SOLO AL QUE TIENE LA IP ESPECIFICADA
+                    InetAddress cl_address = client_addresses.get(i); //verifica que la ip del mensaje este en la lista y envia el paquete
+                    //solo a esa
                     int cl_port = client_ports.get(i);
-                    System.out.println(senderIp + "   sender");
-                    System.out.println(client_addresses.get(i)+ "    lista");
                     if (client_addresses.get(i).toString().equals(senderIp)){
                         packet = new DatagramPacket(data, data.length, cl_address, cl_port);
                         socket.send(packet);
