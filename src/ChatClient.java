@@ -64,9 +64,26 @@ class MessageReceiver implements Runnable {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
                 String received = new String(packet.getData(), 1, packet.getLength() - 1).trim();
-                //crea una string con los datos recibidos y se imprime en la consola
-                System.out.println(received);
-                window.displayMessage(received); //tmb se imprime en la ventana
+                //crea una string con los datos recibidos
+                String receivedFinal=" ";
+                String senderIp="";
+                boolean status=false;
+                for (int i=0;i<received.length();i++){
+                    if (received.charAt(i)=='#'){
+                        status=true;
+                    }
+                    if (status==false){
+                        senderIp=senderIp+received.charAt(i);
+                    }
+                    else {
+                        receivedFinal=receivedFinal+received.charAt(i);
+                    }
+                }
+                if (receivedFinal.equals(" ")){
+                    receivedFinal="No";
+                }
+                System.out.println(receivedFinal);
+                window.displayMessage(receivedFinal); //tmb se imprime en la ventana
             } catch (Exception e) {
                 System.err.println(e);
             }
