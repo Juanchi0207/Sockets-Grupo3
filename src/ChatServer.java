@@ -65,7 +65,7 @@ public class ChatServer implements  Runnable {
                     if (client_addresses.get(i).toString().equals(senderIp)){
                         packet = new DatagramPacket(data, data.length, cl_address, cl_port);
                         socket.send(packet);
-                        data=(" El mensaje fue recibido").getBytes();
+                        data=(" El mensaje fue recibido por " + cl_address).getBytes();
                         packet =new DatagramPacket(data,data.length, clientAddress, client_port);
                         socket.send(packet);
                     }
