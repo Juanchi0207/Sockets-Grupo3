@@ -20,6 +20,7 @@ class MessageSender implements Runnable {
         InetAddress address = InetAddress.getByName(hostName); //obtiene ip
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, PORT);
         socket.send(packet); //crea y envia el paquete por el socket
+
     }
 
     public void run() {
@@ -32,19 +33,27 @@ class MessageSender implements Runnable {
                 window.displayMessage(e.getMessage());
             } //conecta al cliente y entra en un bucle infinito
         } while (!connected);
-        while (true) {
+        boolean infiniteLoop=true;
+        while (infiniteLoop) {
             try {
                 while (!window.message_is_ready) { //este bucle se repite infinitas veces
                     //esperando que esta condicion sea true (pq esta inicializado en false)
                     Thread.sleep(100);
                 }
-                sendMessage(window.getMessage()); //cuando es true manda en mensaje a la ventana
-                window.setMessageReady(false); //vuelve a setearlo en false para esperar otro mensaje
+                if (!window.getMessage().contains("#stop")) {
+                    sendMessage(window.getMessage()); //cuando es true manda en mensaje a la ventana
+                    window.setMessageReady(false); //vuelve a setearlo en false para esperar otro mensaje
+                }
+                else {
+                    Thread.currentThread().join();
+                    infiniteLoop=false;
+                }
             } catch (Exception e) {
                 window.displayMessage(e.getMessage()); //mensaje de error
 
             }
         }
+        Thread.currentThread().interrupt();
     }
 }
 
@@ -60,7 +69,8 @@ class MessageReceiver implements Runnable {
     }
 
     public void run() {
-        while (true) {
+        boolean infiniteLoop=true;
+        while (infiniteLoop) {
             try { //bucle infinito que recibe paquetes
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
@@ -92,11 +102,18 @@ class MessageReceiver implements Runnable {
                     receivedFinal=received;
                 }
                 System.out.println(receivedFinal);
-                window.displayMessage(receivedFinal); //tmb se imprime en la ventana
+                if (!receivedFinal.contains("#stop")) {
+                    window.displayMessage(receivedFinal); //tmb se imprime en la ventana
+                }
+                else {
+                    Thread.currentThread().join();
+                    infiniteLoop=false;
+                }
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
+        Thread.currentThread().interrupt();
     }
 
     public DatagramSocket getSocket() {
