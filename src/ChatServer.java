@@ -59,7 +59,7 @@ public class ChatServer implements  Runnable {
                             senderIp = senderIp + received.charAt(i);
                         }
                     }
-                if (!message.contains("#stop")) {
+                if (!message.contains("#stopServer")) {
                     byte[] data = (id + " :" + message).getBytes(); //guardamos los datos obtenidos en el byte
                     for (int i = 0; i < client_addresses.size(); i++) {
                         InetAddress cl_address = client_addresses.get(i); //verifica que la ip del mensaje este en la lista y envia el paquete
@@ -75,7 +75,6 @@ public class ChatServer implements  Runnable {
                     }
                 }
                 else {
-                    System.out.println("entro");
                     Thread.currentThread().join();
                     infiniteLoop=false;
                 }

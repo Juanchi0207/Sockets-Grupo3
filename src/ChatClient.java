@@ -40,7 +40,7 @@ class MessageSender implements Runnable {
                     //esperando que esta condicion sea true (pq esta inicializado en false)
                     Thread.sleep(100);
                 }
-                if (!window.getMessage().contains("#stop")) {
+                if (!window.getMessage().contains("#stopClient")) {
                     sendMessage(window.getMessage()); //cuando es true manda en mensaje a la ventana
                     window.setMessageReady(false); //vuelve a setearlo en false para esperar otro mensaje
                 }
@@ -102,7 +102,7 @@ class MessageReceiver implements Runnable {
                     receivedFinal=received;
                 }
                 System.out.println(receivedFinal);
-                if (!receivedFinal.contains("#stop")) {
+                if (!receivedFinal.contains("#stopClient")) {
                     window.displayMessage(receivedFinal); //tmb se imprime en la ventana
                 }
                 else {
